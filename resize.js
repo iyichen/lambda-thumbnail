@@ -22,6 +22,16 @@ exports.handler = (event, context, callback) => {
 
     // console.log("request:" + JSON.stringify(request));
 
+    // read the required path. Ex: uri /thumbnails/200x200/gamely/1/def1.png
+    let path = request.uri;
+
+    console.log("path not exist. path:" + path);
+
+    if (!path.startsWith("/thumbnails")){
+        callback(null, response);
+        return;
+    }
+
     let bucket;
 
     let host = request.origin.s3.domainName;
@@ -34,10 +44,6 @@ exports.handler = (event, context, callback) => {
         return;
     }
 
-
-    // read the required path. Ex: uri /thumbnails/200x200/gamely/1/def1.png
-    let path = request.uri;
-
     // Ex: path variable /thumbnails/200x200/gamely/1/def1.png
     let key = path.substring(1); // thumbnails/200x200/gamely/1/def1.png
 
@@ -45,21 +51,21 @@ exports.handler = (event, context, callback) => {
     let originalKey, match, width, height, requiredFormat, imageKey;
     let startIndex;
 
-    match = key.match(/(.*)\/(\d+)x(\d+)\/((.*)\.(.*))/);
+    match = key.match(/thumbnails\/(\d+)x(\d+)\/((.*)\.(.*))/);
 
-    if (match == null || match.length != 7) {
+    if (match == null || match.length != 6) {
       callback(null, response);
       return;
     }
 
     try {
 
-      width = parseInt(match[2], 10);
-      height = parseInt(match[3], 10);
+      width = parseInt(match[1], 10);
+      height = parseInt(match[2], 10);
 
-      imageKey = match[4];
+      imageKey = match[3];
       // correction for jpg required for 'Sharp'
-      requiredFormat = match[6].toLowerCase();
+      requiredFormat = match[5].toLowerCase();
       requiredFormat = (requiredFormat == "jpg" ? "jpeg" : (requiredFormat == "gif" ? "png" : requiredFormat));
       
       originalKey = imageKey;

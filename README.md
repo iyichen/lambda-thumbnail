@@ -150,12 +150,6 @@ Code reference from [https://amazonaws-china.com/cn/blogs/networking-and-content
                 "key": "Accept-Encoding",
                 "value": "gzip"
               }
-            ],
-            "host": [
-              {
-                "key": "Host",
-                "value": "zym-test.s3.amazonaws.com"
-              }
             ]
           },
           "method": "GET",
@@ -163,7 +157,7 @@ Code reference from [https://amazonaws-china.com/cn/blogs/networking-and-content
             "s3": {
               "authMethod": "origin-access-identity",
               "customHeaders": {},
-              "domainName": "zym-test.s3.amazonaws.com",
+              "domainName": "test.s3.amazonaws.com", // s3
               "path": "",
               "region": "ap-northeast-1"
             }
